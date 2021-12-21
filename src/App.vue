@@ -1,18 +1,47 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div>{{ name }}</div>
+    <input type="text" v-model="newData">
+    <div>
+      <button @click="changeName(newData)">Change Name</button>
+    </div>
+    <div>
+      Total names: {{ nameCount }}
+    </div>
+    {{ nameList }}
+    <div>
+      <button @click="addNewName">Add</button>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import { mapActions, mapState, mapGetters } from 'vuex'
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
-  }
+  data() {
+    return {
+      newData: '',
+      newNameList: []
+    }
+  },
+  computed: {
+    ...mapState(['name', 'nameList']),
+    ...mapGetters(['nameCount']),
+  },
+  methods: {
+    ...mapActions(['changeName', 'addName']),
+    addNewName() {
+      this.newNameList.push(this.newData);
+      this.addName(this.newNameList);
+    },
+    removeName(index) {
+      this.newNameList.splice(index, 1);
+      this.addName(this.newNameList);
+    }
+  },
 }
 </script>
 
